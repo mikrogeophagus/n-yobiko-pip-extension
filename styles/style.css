@@ -1,0 +1,37 @@
+.layer--hidden {
+  display: none;
+}
+
+#composite-canvas {
+  display: none;
+}
+
+#composite-video,
+#composite-canvas {
+  max-width: 100%;
+}
+
+.pip-button-container {
+  margin: 0px 12px 14px 0px;
+}
+
+.pip-button {
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+}
+
+.pip-button:hover,
+.pip-button:active {
+  text-decoration: none;
+  color: #4f73e3;
+  cursor: pointer;
+}
+
+/* Bootstrap Icons */
+.bi-pip {
+  position: relative;
+  display: block;
+  top: 4px;
+  width: 24px;
+  height: 24px;
+}
