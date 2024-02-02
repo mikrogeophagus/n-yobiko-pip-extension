@@ -3,7 +3,7 @@
   "name": "N-Yobiko PiP Extension",
   "description": "N予備校の授業をピクチャー イン ピクチャーで視聴できる拡張機能です。流れるコメントや運営コメントも描画されます。",
   "homepage_url": "https://github.com/mikrogeophagus/n-yobiko-pip-extension",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "icons": {
     "16": "images/icon16.png",
     "32": "images/icon32.png",
