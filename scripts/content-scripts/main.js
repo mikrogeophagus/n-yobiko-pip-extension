@@ -59,8 +59,7 @@
         isCommentsVisible = mutation.target.getAttribute('type') === 'comment'
 
         // 再生停止中にコメントの可視状態が変化した場合もフレームが更新されるようにする
-        compositeLayers()
-        drawOfficialComment()
+        drawVideoFrame()
 
         // XXX: なぜか常にコメントレイヤーを非表示にしないと、映像レイヤーと合成できなかったり、コメントがチラついて表示されたりする
         //      コメント表示切替ボタンをクリックすると、コメントレイヤーの display: none が付け外しされてコメントの可視状態が切り替わっている
@@ -127,14 +126,21 @@
   }
 
   /**
+   * 動画のフレームを描画する関数
+   */
+  function drawVideoFrame() {
+    compositeLayers()
+    drawOfficialComment()
+  }
+
+  /**
    * 映像レイヤーとコメントレイヤーを合成してアニメーションを再生する関数
    * 映像レイヤーが再生されていない場合は終了する
   */
   function animate() {
     if (sourceVideo.paused || sourceVideo.ended) return
     requestAnimationFrame(animate)
-    compositeLayers()
-    drawOfficialComment()
+    drawVideoFrame()
   }
 
   //================================================
@@ -152,20 +158,17 @@
 
   // 再生停止中にシーク操作をした場合もフレームが更新されるようにする
   sourceVideo.addEventListener('seeked', (_event) => {
-    compositeLayers()
-    drawOfficialComment()
+    drawVideoFrame()
   })
 
   // 再生停止中に PiP モードを変更した場合もフレームが更新されるようにする
   video.addEventListener('enterpictureinpicture', (_event) => {
-    compositeLayers()
-    drawOfficialComment()
+    drawVideoFrame()
   })
 
   // 再生停止中に PiP モードを変更した場合もフレームが更新されるようにする
   video.addEventListener('leavepictureinpicture', (_event) => {
-    compositeLayers()
-    drawOfficialComment()
+    drawVideoFrame()
   })
 
   //================================================
