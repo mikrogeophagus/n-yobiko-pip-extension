@@ -8,7 +8,7 @@
   //================================================
 
   // 表示中の運営コメントを保持する
-  let officialComment = ''
+  let officialComment = videoPlayer.firstElementChild.textContent.trim()
 
   new MutationObserver((mutations, _observer) => {
     for (const mutation of mutations) {
