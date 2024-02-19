@@ -2,13 +2,14 @@
   'use strict'
 
   const videoPlayer = await waitForSelector('[aria-label="動画プレイヤー"]')
+  const informationBar = videoPlayer.firstElementChild
 
   //================================================
   // 運営コメントの取得と設定
   //================================================
 
   // 表示中の運営コメントを保持する
-  let officialComment = videoPlayer.firstElementChild.textContent.trim()
+  let officialComment = informationBar.textContent.trim()
 
   new MutationObserver((mutations, _observer) => {
     for (const mutation of mutations) {
@@ -19,7 +20,7 @@
         officialComment = ''
       }
     }
-  }).observe(videoPlayer.firstElementChild, {
+  }).observe(informationBar, {
     subtree: true,
     childList: true
   })
