@@ -38,7 +38,7 @@ function element(strings, ...values) {
   const template = document.createElement('template')
 
   template.innerHTML = String.raw({ raw: strings }, ...values.map((value) => {
-    return typeof value === 'string' ? escape(value) : value
+    return typeof value === 'string' ? sanitize(value) : value
   }))
 
   if (template.content.childElementCount > 1) {
@@ -48,7 +48,7 @@ function element(strings, ...values) {
   return template.content.firstElementChild
 }
 
-function escape(string) {
+function sanitize(string) {
   return string
     .replace(/&/g, '&amp;')
     .replace(/'/g, '&apos;')
