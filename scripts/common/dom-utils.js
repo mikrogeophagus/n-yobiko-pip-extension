@@ -42,10 +42,6 @@ function element(strings, ...substitutions) {
     return typeof substitution === 'string' ? sanitize(substitution) : substitution
   }))
 
-  if (template.content.childElementCount > 1) {
-    throw new Error('最上位の要素は一つでなければなりません。')
-  }
-
   return template.content.firstElementChild
 }
 
