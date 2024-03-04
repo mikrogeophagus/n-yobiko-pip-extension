@@ -28,11 +28,12 @@ function waitForSelector(selector, { timeout = 30000 } = {}) {
 }
 
 /**
- * HTML 文字列を基に HTML 要素を生成するタグ関数
- * 埋め込み式はサニタイズされる
- * @param {TemplateStringsArray} strings
- * @param {...any} values
- * @returns {?Element}
+ * HTML 文字列を基に HTML 要素を生成するタグ関数  
+ * 埋め込み式の値が文字列の場合はサニタイズする  
+ * トップレベルの要素は 1 つまでとする
+ * @param {TemplateStringsArray} strings - HTML 文字列
+ * @param {...any} values - 埋め込み式
+ * @returns {?Element} - HTML 要素
  */
 function element(strings, ...values) {
   const template = document.createElement('template')
