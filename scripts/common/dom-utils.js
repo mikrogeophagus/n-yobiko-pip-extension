@@ -50,10 +50,9 @@ function element(strings, ...values) {
 
 function escape(string) {
   return string
+    .replace(/&/g, '&amp;')
+    .replace(/'/g, '&apos;')
+    .replace(/"/g, '&quot;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
-    .replace(/&/g, '&amp;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;')
-    .replace(/`/g, '&#x60;')
 }
