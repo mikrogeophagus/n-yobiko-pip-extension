@@ -78,7 +78,7 @@
   //================================================
 
   /** @type {HTMLCanvasElement} */
-  const canvas = element`<canvas width="${width}" height="${height}" id="composite-canvas"></canvas>`
+  const canvas = html`<canvas width="${width}" height="${height}" id="composite-canvas"></canvas>`
   sourceCanvas.parentElement.insertBefore(canvas, sourceCanvas)
 
   const context = canvas.getContext('2d')
@@ -88,7 +88,7 @@
   //================================================
 
   /** @type {HTMLVideoElement} */
-  const video = element`<video autoplay muted id="composite-video"></video>`
+  const video = html`<video autoplay muted id="composite-video"></video>`
   sourceVideo.parentElement.insertBefore(video, sourceVideo)
 
   video.srcObject = canvas.captureStream()
@@ -177,10 +177,10 @@
   //================================================
 
   /** @type {HTMLDivElement} */
-  const pipButtonContainer = element`<div class="pip-button-container"></div>`
+  const pipButtonContainer = html`<div class="pip-button-container"></div>`
 
   /** @type {HTMLAnchorElement} */
-  const togglePipButton = element`
+  const togglePipButton = html`
     <a class="pip-button">
       <!-- Bootstrap Icons | MIT License | https://github.com/twbs/icons/blob/main/LICENSE -->
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pip" viewBox="0 0 16 16">
