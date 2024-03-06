@@ -35,7 +35,7 @@ function waitForSelector(selector, { timeout = 30000 } = {}) {
  * @param {...any} substitutions - 埋め込み式
  * @returns {?Element} - HTML 要素
  */
-function element(strings, ...substitutions) {
+function html(strings, ...substitutions) {
   const template = document.createElement('template')
 
   template.innerHTML = String.raw({ raw: strings }, ...substitutions.map((substitution) => {
