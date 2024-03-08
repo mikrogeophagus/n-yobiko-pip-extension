@@ -19,7 +19,7 @@ function waitForSelector(selector, { timeout = 30000 } = {}) {
         clearTimeout(timeoutId)
         resolve(element)
       } else {
-        setTimeout(checkSelector, 500)
+        requestAnimationFrame(checkSelector)
       }
     }
 
