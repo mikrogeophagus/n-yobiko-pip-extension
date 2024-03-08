@@ -1,12 +1,13 @@
 'use strict'
 
 /**
- * セレクターに一致する要素が現れるまで待機して返す関数
- * セレクターに一致する要素が現れない場合はタイムアウト時間が経過したら例外を投げる
- * @param {string} selector CSS セレクター
- * @param {object} [options] オプション
- * @param {number} [options.timeout=30000] タイムアウト時間（ミリ秒）
- * @returns {Promise<Element>} HTML 要素
+ * セレクターに一致する要素が出現するまで待機して取得する関数  
+ * タイムアウト時間が経過した場合は例外をスローする
+ * @param {string} selector - CSS セレクター
+ * @param {object} [options] - 待機パラメーター（オプション）
+ * @param {number} [options.timeout=30000] - タイムアウト時間（ミリ秒）
+ * @returns {Promise<Element>} - HTML 要素
+ * @throws {DOMException} - タイムアウトエラー
  */
 function waitForSelector(selector, { timeout = 30000 } = {}) {
   return new Promise((resolve, reject) => {
