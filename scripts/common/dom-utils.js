@@ -10,7 +10,7 @@
  */
 function waitForSelector(selector, { timeout = 30000 } = {}) {
   return new Promise((resolve, reject) => {
-    const timeoutId = setTimeout(reject, timeout, new Error(`${selector} に一致する要素が見つかりません。`))
+    const timeoutId = setTimeout(reject, timeout, new DOMException(`${selector} に一致する要素が ${timeout}ms 以内に出現せずタイムアウトしました`, 'TimeoutError'))
 
     function checkSelector() {
       const element = document.querySelector(selector)
