@@ -196,6 +196,12 @@
       : await sourceVideo.requestPictureInPicture()
   })
 
+  const controlBar = videoPlayer
+    .lastElementChild
+    .lastElementChild
+    .lastElementChild
+    .lastElementChild
+
   pipButtonContainer.appendChild(togglePipButton)
-  sourceCanvas.nextElementSibling.lastElementChild.appendChild(pipButtonContainer)
+  controlBar.appendChild(pipButtonContainer)
 })()
