@@ -193,7 +193,7 @@
   togglePipButton.addEventListener('click', async (_event) => {
     document.pictureInPictureElement
       ? await document.exitPictureInPicture()
-      : await sourceVideo.requestPictureInPicture()
+      : await video.requestPictureInPicture()
   })
 
   const controlBar = videoPlayer
