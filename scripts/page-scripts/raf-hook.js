@@ -1,8 +1,7 @@
 (async () => {
   'use strict'
 
-  /** @type {HTMLVideoElement} */
-  const video = await waitForSelector('video[src^="blob"]')
+  const video = /** @type {HTMLVideoElement} */ (await waitForSelector('video[src^="blob"]'))
 
   /*
     requestAnimationFrame() をフックする
@@ -18,6 +17,7 @@
 
   const originalRequestAnimationFrame = requestAnimationFrame
 
+  // @ts-expect-error
   requestAnimationFrame = function (callback) {
     if (document.visibilityState === 'visible') {
       const requestId = originalRequestAnimationFrame(callback)

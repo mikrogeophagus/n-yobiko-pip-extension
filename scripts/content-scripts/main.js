@@ -29,8 +29,7 @@
   // 映像レイヤーの取得と設定
   //================================================
 
-  /** @type {HTMLVideoElement} */
-  const sourceVideo = await waitForSelector('video')
+  const sourceVideo = /** @type {HTMLVideoElement} */ (await waitForSelector('video'))
   sourceVideo.classList.add('layer', 'layer--hidden')
   sourceVideo.id = 'video-layer'
 
@@ -38,8 +37,7 @@
   // コメントレイヤーの取得と設定
   //================================================
 
-  /** @type {HTMLCanvasElement} */
-  const sourceCanvas = await waitForSelector('canvas')
+  const sourceCanvas = /** @type {HTMLCanvasElement} */ (await waitForSelector('canvas'))
   sourceCanvas.classList.add('layer', 'layer--hidden')
   sourceCanvas.id = 'comment-layer'
 
@@ -49,7 +47,6 @@
   // コメント可視状態アイコンの取得と設定
   //================================================
 
-  /** @type {HTMLElement} */
   const commentsVisibilityIcon = await waitForSelector('i[type|="comment"]')
   let isCommentsVisible = commentsVisibilityIcon.getAttribute('type') === 'comment'
 
@@ -57,7 +54,7 @@
   new MutationObserver((mutations, _observer) => {
     for (const mutation of mutations) {
       if (mutation.type === 'attributes' && mutation.attributeName === 'type') {
-        isCommentsVisible = mutation.target.getAttribute('type') === 'comment'
+        isCommentsVisible = commentsVisibilityIcon.getAttribute('type') === 'comment'
 
         // 再生停止中にコメントの可視状態が変化した場合もフレームが更新されるようにする
         drawVideoFrame()
@@ -75,8 +72,7 @@
   // レイヤー合成用のキャンバス要素の作成と設定
   //================================================
 
-  /** @type {HTMLCanvasElement} */
-  const canvas = html`<canvas width="${width}" height="${height}" id="composite-canvas"></canvas>`
+  const canvas = /** @type {HTMLCanvasElement} */ (html`<canvas width="${width}" height="${height}" id="composite-canvas"></canvas>`)
   sourceCanvas.parentElement.insertBefore(canvas, sourceCanvas)
 
   const context = canvas.getContext('2d')
@@ -85,8 +81,7 @@
   // 合成動画再生用の動画要素の作成と設定
   //================================================
 
-  /** @type {HTMLVideoElement} */
-  const video = html`<video autoplay muted id="composite-video"></video>`
+  const video = /** @type {HTMLVideoElement} */ (html`<video autoplay muted id="composite-video"></video>`)
   sourceVideo.parentElement.insertBefore(video, sourceVideo)
 
   video.srcObject = canvas.captureStream()
@@ -174,11 +169,8 @@
   // PiP モード切替ボタンの作成と設定
   //================================================
 
-  /** @type {HTMLDivElement} */
-  const pipButtonContainer = html`<div class="pip-button-container"></div>`
-
-  /** @type {HTMLAnchorElement} */
-  const togglePipButton = html`
+  const pipButtonContainer = /** @type {HTMLDivElement} */ (html`<div class="pip-button-container"></div>`)
+  const togglePipButton = /** @type {HTMLAnchorElement} */ (html`
     <a class="pip-button">
       <!-- Bootstrap Icons | MIT License | https://github.com/twbs/icons/blob/main/LICENSE -->
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pip" viewBox="0 0 16 16">
@@ -186,7 +178,7 @@
         <path d="M8 8.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5h-5a.5.5 0 0 1-.5-.5v-3z"/>
       </svg>
     </a>
-  `
+  `)
 
   togglePipButton.addEventListener('click', async (_event) => {
     document.pictureInPictureElement
