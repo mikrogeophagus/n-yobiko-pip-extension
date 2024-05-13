@@ -7,6 +7,8 @@ const resources = [
 
 for (const resource of resources) {
   const script = document.createElement('script')
+
+  // @ts-expect-error
   script.src = chrome.runtime.getURL(resource)
   script.async = false
 
