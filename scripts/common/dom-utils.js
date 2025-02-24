@@ -1,30 +1,46 @@
 'use strict'
 
 /**
- * セレクターに一致する要素が出現するまで待機して取得する関数  
- * タイムアウト時間が経過した場合は例外をスローする
+ * CSS セレクターに一致する HTML 要素が現れるまで待機する関数
+ *
+ * - セレクターに一致する要素が現れた場合、その要素で解決するプロミスを返す
+ * - タイムアウト時間が経過した場合、TimeoutError の DOMException で拒否するプロミスを返す
+ *
  * @param {string} selector - CSS セレクター
- * @param {object} [options] - 待機パラメーター（オプション）
- * @param {number} [options.timeoutMs=30000] - タイムアウト時間（ミリ秒）
- * @returns {Promise<Element>} - HTML 要素
- * @throws {DOMException} - タイムアウトエラー
+ * @param {object} [options] - オプション設定
+ * @param {number} [options.timeoutMs=30000] - タイムアウト時間（デフォルト値 30000 ミリ秒）
+ * @returns {Promise<Element>} - CSS セレクターに一致する HTML 要素で解決するプロミス
  */
 function waitForSelector(selector, { timeoutMs = 30000 } = {}) {
   return new Promise((resolve, reject) => {
-    const timeoutId = setTimeout(reject, timeoutMs, new DOMException(`${selector} に一致する要素が ${timeoutMs}ms 以内に出現せずタイムアウトしました`, 'TimeoutError'))
+    const timeoutId = setTimeout(timeout, timeoutMs)
 
-    function checkSelector() {
+    const observer = new MutationObserver(check)
+    observer.observe(document, { childList: true, subtree: true })
+
+    check()
+
+    function check() {
       const element = document.querySelector(selector)
 
       if (element) {
-        clearTimeout(timeoutId)
+        cleanup()
         resolve(element)
-      } else {
-        requestAnimationFrame(checkSelector)
       }
     }
 
-    checkSelector()
+    function timeout() {
+      cleanup()
+      reject(new DOMException(
+        `${selector} で選択される要素が ${timeoutMs}ms 以内に見つかりませんでした。`,
+        'TimeoutError'
+      ))
+    }
+
+    function cleanup() {
+      clearTimeout(timeoutId)
+      observer.disconnect()
+    }
   })
 }
 
