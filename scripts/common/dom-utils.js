@@ -5,13 +5,13 @@
  * タイムアウト時間が経過した場合は例外をスローする
  * @param {string} selector - CSS セレクター
  * @param {object} [options] - 待機パラメーター（オプション）
- * @param {number} [options.timeout=30000] - タイムアウト時間（ミリ秒）
+ * @param {number} [options.timeoutMs=30000] - タイムアウト時間（ミリ秒）
  * @returns {Promise<Element>} - HTML 要素
  * @throws {DOMException} - タイムアウトエラー
  */
-function waitForSelector(selector, { timeout = 30000 } = {}) {
+function waitForSelector(selector, { timeoutMs = 30000 } = {}) {
   return new Promise((resolve, reject) => {
-    const timeoutId = setTimeout(reject, timeout, new DOMException(`${selector} に一致する要素が ${timeout}ms 以内に出現せずタイムアウトしました`, 'TimeoutError'))
+    const timeoutId = setTimeout(reject, timeoutMs, new DOMException(`${selector} に一致する要素が ${timeoutMs}ms 以内に出現せずタイムアウトしました`, 'TimeoutError'))
 
     function checkSelector() {
       const element = document.querySelector(selector)
