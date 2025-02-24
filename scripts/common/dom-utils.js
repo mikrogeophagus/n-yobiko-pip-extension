@@ -45,7 +45,7 @@ function waitForSelector(selector, { timeoutMs = 30000 } = {}) {
 }
 
 /**
- * HTML 文字列を基に HTML 要素を生成するタグ関数  
+ * HTML の文字列をもとに要素を生成するタグ関数  
  * 埋め込み式の値が文字列の場合は HTML の特殊文字をエスケープする  
  * トップレベルの要素は 1 つまでとする
  * @param {TemplateStringsArray} strings - HTML 文字列
