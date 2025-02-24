@@ -62,6 +62,12 @@ function html(strings, ...substitutions) {
   return template.content.firstElementChild
 }
 
+/**
+ * HTML の特殊文字をエスケープする関数
+ * 
+ * @param {string} string - エスケープする文字列
+ * @returns {string} - エスケープした文字列
+ */
 function escapeHtml(string) {
   return string
     .replace(/&/g, '&amp;')
