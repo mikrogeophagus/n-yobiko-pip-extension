@@ -13,8 +13,7 @@
   "content_scripts": [
     {
       "js": [
-        "scripts/common/dom-utils.js",
-        "scripts/content-scripts/inject-scripts.js",
+        "scripts/content-scripts/dom-utils.js",
         "scripts/content-scripts/main.js"
       ],
       "matches": [
@@ -27,17 +26,6 @@
       ],
       "matches": [
         "https://www.nnn.ed.nico/lessons/*"
-      ]
-    }
-  ],
-  "web_accessible_resources": [
-    {
-      "resources": [
-        "scripts/common/dom-utils.js",
-        "scripts/page-scripts/raf-hook.js"
-      ],
-      "matches": [
-        "https://www.nnn.ed.nico/*"
       ]
     }
   ]
