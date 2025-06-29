@@ -51,6 +51,7 @@ function waitForSelector(selector, { signal = AbortSignal.timeout(30000) } = {})
  * @param {TemplateStringsArray} strings - HTML 文字列
  * @param {...any} substitutions - 埋め込み式
  * @returns {?Element} - HTML 要素
+ * @throws {Error} - トップレベルの要素が 2 つ以上存在する場合
  */
 function html(strings, ...substitutions) {
   const template = document.createElement('template')
@@ -58,6 +59,10 @@ function html(strings, ...substitutions) {
   template.innerHTML = String.raw({ raw: strings }, ...substitutions.map((substitution) => {
     return typeof substitution === 'string' ? escapeHtml(substitution) : substitution
   }))
+
+  if (template.content.childElementCount > 1) {
+    throw new Error('トップレベルの要素は 1 つまでとしてください')
+  }
 
   return template.content.firstElementChild
 }
