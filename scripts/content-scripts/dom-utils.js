@@ -49,15 +49,20 @@ function waitForSelector(selector, { signal = AbortSignal.timeout(30000) } = {})
  * 埋め込み式の値が文字列の場合は HTML の特殊文字をエスケープする  
  * トップレベルの要素は 1 つまでとする
  * @param {TemplateStringsArray} strings - HTML 文字列
- * @param {...any} substitutions - 埋め込み式
+ * @param {...any} values - 埋め込み式の値
  * @returns {?Element} - HTML 要素
+ * @throws {Error} - トップレベルの要素が 2 つ以上存在する場合
  */
-function html(strings, ...substitutions) {
+function html(strings, ...values) {
   const template = document.createElement('template')
 
-  template.innerHTML = String.raw({ raw: strings }, ...substitutions.map((substitution) => {
-    return typeof substitution === 'string' ? escapeHtml(substitution) : substitution
+  template.innerHTML = String.raw({ raw: strings }, ...values.map((value) => {
+    return typeof value === 'string' ? escapeHtml(value) : value
   }))
+
+  if (template.content.childElementCount > 1) {
+    throw new Error('トップレベルの要素は 1 つまでとしてください')
+  }
 
   return template.content.firstElementChild
 }
