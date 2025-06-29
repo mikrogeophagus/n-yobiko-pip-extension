@@ -4,43 +4,43 @@
  * CSS セレクターに一致する HTML 要素が現れるまで待機する関数
  *
  * - セレクターに一致する要素が現れた場合、その要素で解決するプロミスを返す
- * - タイムアウト時間が経過した場合、TimeoutError の DOMException で拒否するプロミスを返す
+ * - 操作を中止した場合、その理由 ({@linkcode AbortSignal.reason}) で拒否するプロミスを返す
  *
  * @param {string} selector - CSS セレクター
  * @param {object} [options] - オプション設定
- * @param {number} [options.timeoutMs=30000] - タイムアウト時間（デフォルト値 30000 ミリ秒）
+ * @param {AbortSignal} [options.signal] - 中止シグナル（デフォルトでは 30 秒後にタイムアウトする）
  * @returns {Promise<Element>} - CSS セレクターに一致する HTML 要素で解決するプロミス
  */
-function waitForSelector(selector, { timeoutMs = 30000 } = {}) {
+function waitForSelector(selector, { signal = AbortSignal.timeout(30000) } = {}) {
   return new Promise((resolve, reject) => {
-    const timeoutId = setTimeout(timeout, timeoutMs)
+    // すでに操作が中止されているかチェック
+    if (signal.aborted) return reject(signal.reason)
 
-    const observer = new MutationObserver(check)
-    observer.observe(document, { childList: true, subtree: true })
+    // すでに要素が存在するかチェック
+    const element = document.querySelector(selector)
+    if (element) return resolve(element)
 
-    check()
+    const cleanUp = () => {
+      observer.disconnect()
+      signal.removeEventListener('abort', onAbort)
+    }
 
-    function check() {
+    const onAbort = () => {
+      cleanUp()
+      reject(signal.reason)
+    }
+
+    const observer = new MutationObserver(() => {
       const element = document.querySelector(selector)
 
       if (element) {
-        cleanup()
+        cleanUp()
         resolve(element)
       }
-    }
+    })
 
-    function timeout() {
-      cleanup()
-      reject(new DOMException(
-        `${selector} で選択される要素が ${timeoutMs}ms 以内に見つかりませんでした。`,
-        'TimeoutError'
-      ))
-    }
-
-    function cleanup() {
-      clearTimeout(timeoutId)
-      observer.disconnect()
-    }
+    observer.observe(document, { childList: true, subtree: true })
+    signal.addEventListener('abort', onAbort)
   })
 }
 
