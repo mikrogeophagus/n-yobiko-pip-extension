@@ -13,7 +13,7 @@
   "content_scripts": [
     {
       "js": [
-        "scripts/common/dom-utils.js",
+        "scripts/content-scripts/dom-utils.js",
         "scripts/content-scripts/main.js"
       ],
       "matches": [
