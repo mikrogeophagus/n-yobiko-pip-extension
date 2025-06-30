@@ -1,41 +1,28 @@
 (async () => {
   'use strict'
 
-  const videoPlayer = await waitForSelector('[aria-label="動画プレイヤー"]')
-  const informationBar = videoPlayer.firstElementChild
+  const informationBar = await waitForSelector('[aria-label="動画プレイヤー"] > div:first-child')
+  const controlBar = await waitForSelector('[aria-label="動画プレイヤー"] > div:last-child > div:last-child > div:last-child > div:last-child')
 
-  //================================================
-  // 運営コメントの取得と設定
-  //================================================
+  // MARK: - 運営コメントの取得と設定
 
   // 表示中の運営コメントを保持する
   let officialComment = informationBar.textContent.trim()
 
-  new MutationObserver((mutations, _observer) => {
-    for (const mutation of mutations) {
-      if (mutation.addedNodes.length) {
-        const addedNode = mutation.addedNodes.item(0)
-        officialComment = addedNode.textContent.trim()
-      } else if (mutation.removedNodes.length) {
-        officialComment = ''
-      }
-    }
+  new MutationObserver(() => {
+    officialComment = informationBar.textContent.trim()
   }).observe(informationBar, {
     subtree: true,
     childList: true
   })
 
-  //================================================
-  // 映像レイヤーの取得と設定
-  //================================================
+  // MARK: - 映像レイヤーの取得と設定
 
   const sourceVideo = /** @type {HTMLVideoElement} */ (await waitForSelector('video'))
   sourceVideo.classList.add('layer', 'layer--hidden')
   sourceVideo.id = 'video-layer'
 
-  //================================================
-  // コメントレイヤーの取得と設定
-  //================================================
+  // MARK: - コメントレイヤーの取得と設定
 
   const sourceCanvas = /** @type {HTMLCanvasElement} */ (await waitForSelector('canvas'))
   sourceCanvas.classList.add('layer', 'layer--hidden')
@@ -43,52 +30,40 @@
 
   const { width, height } = sourceCanvas
 
-  //================================================
-  // コメント可視状態アイコンの取得と設定
-  //================================================
+  // MARK: - コメント可視状態アイコンの取得と設定
 
   const commentsVisibilityIcon = await waitForSelector('i[type|="comment"]')
   let isCommentsVisible = commentsVisibilityIcon.getAttribute('type') === 'comment'
 
   // コメント可視状態アイコンを監視する
-  new MutationObserver((mutations, _observer) => {
-    for (const mutation of mutations) {
-      if (mutation.type === 'attributes' && mutation.attributeName === 'type') {
-        isCommentsVisible = commentsVisibilityIcon.getAttribute('type') === 'comment'
+  new MutationObserver(() => {
+    isCommentsVisible = commentsVisibilityIcon.getAttribute('type') === 'comment'
 
-        // 再生停止中にコメントの可視状態が変化した場合もフレームが更新されるようにする
-        drawVideoFrame()
+    // 再生停止中にコメントの可視状態が変化した場合もフレームが更新されるようにする
+    drawVideoFrame()
 
-        // 常にコメントレイヤーを非表示にする
-        sourceCanvas.classList.add('layer--hidden')
-      }
-    }
+    // 常にコメントレイヤーを非表示にする
+    sourceCanvas.classList.add('layer--hidden')
   }).observe(commentsVisibilityIcon, {
     attributes: true,
     attributeFilter: [ 'type' ]
   })
 
-  //================================================
-  // レイヤー合成用のキャンバス要素の作成と設定
-  //================================================
+  // MARK: - レイヤー合成用のキャンバス要素の作成と設定
 
   const canvas = /** @type {HTMLCanvasElement} */ (html`<canvas width="${width}" height="${height}" id="composite-canvas"></canvas>`)
   sourceCanvas.parentElement.insertBefore(canvas, sourceCanvas)
 
   const context = canvas.getContext('2d')
 
-  //================================================
-  // 合成動画再生用の動画要素の作成と設定
-  //================================================
+  // MARK: - 合成動画再生用の動画要素の作成と設定
 
   const video = /** @type {HTMLVideoElement} */ (html`<video autoplay muted id="composite-video"></video>`)
   sourceVideo.parentElement.insertBefore(video, sourceVideo)
 
   video.srcObject = canvas.captureStream()
 
-  //================================================
-  // レイヤーの合成とアニメーションの処理
-  //================================================
+  // MARK: - レイヤーの合成とアニメーションの処理
 
   /**
    * 映像レイヤーとコメントレイヤーを合成する関数
@@ -137,37 +112,21 @@
     drawVideoFrame()
   }
 
-  //================================================
-  // 動画のイベントリスナーの設定
-  //================================================
+  // MARK: - 動画のイベントリスナーの設定
 
-  sourceVideo.addEventListener('play', (_event) => {
-    animate()
-  })
+  sourceVideo.addEventListener('play', () => animate())
 
   // PiP の対象が常に合成動画になるようにする
-  sourceVideo.addEventListener('enterpictureinpicture', async (_event) => {
-    await video.requestPictureInPicture()
-  })
+  sourceVideo.addEventListener('enterpictureinpicture', () => video.requestPictureInPicture())
 
   // 再生停止中にシーク操作をした場合もフレームが更新されるようにする
-  sourceVideo.addEventListener('seeked', (_event) => {
-    drawVideoFrame()
-  })
+  sourceVideo.addEventListener('seeked', () => drawVideoFrame())
 
   // 再生停止中に PiP モードを変更した場合もフレームが更新されるようにする
-  video.addEventListener('enterpictureinpicture', (_event) => {
-    drawVideoFrame()
-  })
+  video.addEventListener('enterpictureinpicture', () => drawVideoFrame())
+  video.addEventListener('leavepictureinpicture', () => drawVideoFrame())
 
-  // 再生停止中に PiP モードを変更した場合もフレームが更新されるようにする
-  video.addEventListener('leavepictureinpicture', (_event) => {
-    drawVideoFrame()
-  })
-
-  //================================================
-  // PiP モード切替ボタンの作成と設定
-  //================================================
+  // MARK: - PiP モード切替ボタンの作成と設定
 
   const pipButtonContainer = /** @type {HTMLDivElement} */ (html`<div class="pip-button-container"></div>`)
   const togglePipButton = /** @type {HTMLAnchorElement} */ (html`
@@ -180,17 +139,11 @@
     </a>
   `)
 
-  togglePipButton.addEventListener('click', async (_event) => {
+  togglePipButton.addEventListener('click', () => {
     document.pictureInPictureElement
-      ? await document.exitPictureInPicture()
-      : await video.requestPictureInPicture()
+      ? document.exitPictureInPicture()
+      : video.requestPictureInPicture()
   })
-
-  const controlBar = videoPlayer
-    .lastElementChild
-    .lastElementChild
-    .lastElementChild
-    .lastElementChild
 
   pipButtonContainer.appendChild(togglePipButton)
   controlBar.appendChild(pipButtonContainer)
