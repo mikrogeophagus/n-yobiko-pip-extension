@@ -133,7 +133,7 @@
   sourceVideo.addEventListener('play', () => animate())
 
   // PiP の対象が常に合成動画になるようにする
-  sourceVideo.addEventListener('enterpictureinpicture', async () => await video.requestPictureInPicture())
+  sourceVideo.addEventListener('enterpictureinpicture', () => video.requestPictureInPicture())
 
   // 再生停止中にシーク操作をした場合もフレームが更新されるようにする
   sourceVideo.addEventListener('seeked', () => drawVideoFrame())
@@ -157,10 +157,10 @@
     </a>
   `)
 
-  togglePipButton.addEventListener('click', async () => {
+  togglePipButton.addEventListener('click', () => {
     document.pictureInPictureElement
-      ? await document.exitPictureInPicture()
-      : await video.requestPictureInPicture()
+      ? document.exitPictureInPicture()
+      : video.requestPictureInPicture()
   })
 
   const controlBar = videoPlayer
