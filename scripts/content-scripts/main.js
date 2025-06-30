@@ -1,8 +1,8 @@
 (async () => {
   'use strict'
 
-  const videoPlayer = await waitForSelector('[aria-label="動画プレイヤー"]')
-  const informationBar = videoPlayer.firstElementChild
+  const informationBar = await waitForSelector('[aria-label="動画プレイヤー"] > div:first-child')
+  const controlBar = await waitForSelector('[aria-label="動画プレイヤー"] > div:last-child > div:last-child > div:last-child > div:last-child')
 
   //================================================
   // 運営コメントの取得と設定
@@ -162,12 +162,6 @@
       ? document.exitPictureInPicture()
       : video.requestPictureInPicture()
   })
-
-  const controlBar = videoPlayer
-    .lastElementChild
-    .lastElementChild
-    .lastElementChild
-    .lastElementChild
 
   pipButtonContainer.appendChild(togglePipButton)
   controlBar.appendChild(pipButtonContainer)
