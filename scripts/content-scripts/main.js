@@ -11,7 +11,7 @@
   // 表示中の運営コメントを保持する
   let officialComment = informationBar.textContent.trim()
 
-  new MutationObserver((mutations, _observer) => {
+  new MutationObserver(() => {
     officialComment = informationBar.textContent.trim()
   }).observe(informationBar, {
     subtree: true,
@@ -44,7 +44,7 @@
   let isCommentsVisible = commentsVisibilityIcon.getAttribute('type') === 'comment'
 
   // コメント可視状態アイコンを監視する
-  new MutationObserver((mutations, _observer) => {
+  new MutationObserver(() => {
     isCommentsVisible = commentsVisibilityIcon.getAttribute('type') === 'comment'
 
     // 再生停止中にコメントの可視状態が変化した場合もフレームが更新されるようにする
@@ -130,17 +130,17 @@
   // 動画のイベントリスナーの設定
   //================================================
 
-  sourceVideo.addEventListener('play', (_event) => animate())
+  sourceVideo.addEventListener('play', () => animate())
 
   // PiP の対象が常に合成動画になるようにする
-  sourceVideo.addEventListener('enterpictureinpicture', async (_event) => await video.requestPictureInPicture())
+  sourceVideo.addEventListener('enterpictureinpicture', async () => await video.requestPictureInPicture())
 
   // 再生停止中にシーク操作をした場合もフレームが更新されるようにする
-  sourceVideo.addEventListener('seeked', (_event) => drawVideoFrame())
+  sourceVideo.addEventListener('seeked', () => drawVideoFrame())
 
   // 再生停止中に PiP モードを変更した場合もフレームが更新されるようにする
-  video.addEventListener('enterpictureinpicture', (_event) => drawVideoFrame())
-  video.addEventListener('leavepictureinpicture', (_event) => drawVideoFrame())
+  video.addEventListener('enterpictureinpicture', () => drawVideoFrame())
+  video.addEventListener('leavepictureinpicture', () => drawVideoFrame())
 
   //================================================
   // PiP モード切替ボタンの作成と設定
@@ -157,7 +157,7 @@
     </a>
   `)
 
-  togglePipButton.addEventListener('click', async (_event) => {
+  togglePipButton.addEventListener('click', async () => {
     document.pictureInPictureElement
       ? await document.exitPictureInPicture()
       : await video.requestPictureInPicture()
