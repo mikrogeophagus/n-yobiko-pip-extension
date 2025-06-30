@@ -12,14 +12,7 @@
   let officialComment = informationBar.textContent.trim()
 
   new MutationObserver((mutations, _observer) => {
-    for (const mutation of mutations) {
-      if (mutation.addedNodes.length) {
-        const addedNode = mutation.addedNodes.item(0)
-        officialComment = addedNode.textContent.trim()
-      } else if (mutation.removedNodes.length) {
-        officialComment = ''
-      }
-    }
+    officialComment = informationBar.textContent.trim()
   }).observe(informationBar, {
     subtree: true,
     childList: true
@@ -52,17 +45,13 @@
 
   // コメント可視状態アイコンを監視する
   new MutationObserver((mutations, _observer) => {
-    for (const mutation of mutations) {
-      if (mutation.type === 'attributes' && mutation.attributeName === 'type') {
-        isCommentsVisible = commentsVisibilityIcon.getAttribute('type') === 'comment'
+    isCommentsVisible = commentsVisibilityIcon.getAttribute('type') === 'comment'
 
-        // 再生停止中にコメントの可視状態が変化した場合もフレームが更新されるようにする
-        drawVideoFrame()
+    // 再生停止中にコメントの可視状態が変化した場合もフレームが更新されるようにする
+    drawVideoFrame()
 
-        // 常にコメントレイヤーを非表示にする
-        sourceCanvas.classList.add('layer--hidden')
-      }
-    }
+    // 常にコメントレイヤーを非表示にする
+    sourceCanvas.classList.add('layer--hidden')
   }).observe(commentsVisibilityIcon, {
     attributes: true,
     attributeFilter: [ 'type' ]
