@@ -17,7 +17,8 @@
         "scripts/content-scripts/main.js"
       ],
       "matches": [
-        "https://www.nnn.ed.nico/lessons/*"
+        "https://www.nnn.ed.nico/lessons/*",
+        "https://www.nnn.ed.nico/courses/*/chapters/*/lessons/*"
       ]
     },
     {
@@ -25,7 +26,8 @@
         "styles/style.css"
       ],
       "matches": [
-        "https://www.nnn.ed.nico/lessons/*"
+        "https://www.nnn.ed.nico/lessons/*",
+        "https://www.nnn.ed.nico/courses/*/chapters/*/lessons/*"
       ]
     }
   ]
