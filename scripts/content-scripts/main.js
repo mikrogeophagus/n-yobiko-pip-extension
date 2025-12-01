@@ -2,7 +2,7 @@
   'use strict'
 
   const informationBar = await waitForSelector('[aria-label="動画プレイヤー"] > div:first-child')
-  const controlBar = await waitForSelector('[aria-label="動画プレイヤー"] > div:last-child > div:last-child > div:last-child > div:last-child')
+  const controlBar = await waitForSelector(':has(> div > a > i[type|="comment"]):has(> div > a > i[type="theater-mode"])')
 
   // MARK: - 運営コメントの取得と設定
 
